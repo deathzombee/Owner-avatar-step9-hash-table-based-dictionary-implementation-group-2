@@ -1,0 +1,1 @@
+a folder that contains all meeting logs up until this point in the project

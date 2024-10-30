@@ -1,5 +1,9 @@
 {
     "image": "mcr.microsoft.com/devcontainers/python:3",
+"features": {
+    "ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
+},
+"postCreateCommand": "pre-commit install",
     "customizations": {
     "vscode":{
         "settings": {  
