@@ -1,62 +1,13 @@
 {
-    "remoteUser": "codespace",
-    "image": "mcr.microsoft.com/vscode/devcontainers/universal:latest",
-    "runArgs": [
-      "--cap-add=SYS_PTRACE",
-      "--security-opt",
-      "seccomp=unconfined",
-      "--privileged",
-      "--init",
-      "--label",
-      "CodespacesImageType=Default",
-      "--label",
-      "ContainerVersion=13",
-      "--hostname",
-      "codespaces-5a5d14",
-      "--add-host",
-      "codespaces-5a5d14:127.0.0.1",
-      "--cap-add",
-      "sys_nice",
-      "--network",
-      "host"
-    ],
+    "image": "mcr.microsoft.com/devcontainers/python:3",
     "customizations": {
-      "go.toolsManagement.checkForUpdates": "local",
-      "go.useLanguageServer": true,
-      "go.gopath": "/go",
-      "python.defaultInterpreterPath": "/home/codespace/.python/current/bin/python3",
-      "jupyter.kernels.filter": [
-        {
-          "path": "/opt/conda/bin/python",
-          "type": "pythonEnvironment"
-        },
-        {
-          "path": "/bin/python2",
-          "type": "pythonEnvironment"
-        },
-        {
-          "path": "/usr/bin/python2",
-          "type": "pythonEnvironment"
-        },
-        {
-          "path": "/usr/local/python/current/bin/python3",
-          "type": "pythonEnvironment"
-        },
-        {
-          "path": "/usr/local/python/current/bin/python",
-          "type": "pythonEnvironment"
-        },
-        {
-          "path": "/usr/bin/python3",
-          "type": "pythonEnvironment"
-        },
-        {
-          "path": "/bin/python3",
-          "type": "pythonEnvironment"
-        }
-      ],
-      "lldb.executable": "/usr/bin/lldb",
     "vscode":{
+        "settings": {  
+        "python.formatting.provider": "black",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true
+    },
         "extensions":[
             "charliermarsh.ruff",
             "editorconfig.editorconfig",
@@ -68,13 +19,5 @@
             "ms-python.black-formatter"
             ]
             }
-            },
-            "postCreateCommand":
-            "bash scripts/postCreateCommand.sh",
-            "onCreateCommand":
-            "bash scripts/onCreateCommand.sh",
-            "containerEnv":
-            {
-                "CI_PYTHON_PATH":"/workspaces/vscode-python/.venv/bin/python"
-                }
+            }
             }
