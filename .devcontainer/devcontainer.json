@@ -3,7 +3,7 @@
     "customizations": {
     "vscode":{
         "settings": {  
-        "python.formatting.provider": "black",
+        "python.formatting.provider": "ms-python.black-formatter",
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "python.linting.enabled": true,
         "python.linting.ruffEnabled": true
