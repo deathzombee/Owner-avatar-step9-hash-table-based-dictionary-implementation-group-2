@@ -1,6 +1,10 @@
 # not a class, a "struct" or "data class"
+from dataclasses import dataclass
+from satellite import Satellite
 
 
+@dataclass
 class PairD:
-    self.key = key
-    self.value = value
+
+    key: str
+    value: Satellite
