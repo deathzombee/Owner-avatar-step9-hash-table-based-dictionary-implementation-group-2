@@ -20,3 +20,15 @@ class SLDict(DictAbstract):
 
     def pop(self, key):
         pass
+
+    # lisa
+    def rl(self, key):
+        pass
+
+    # Gabriel
+    def rr(self, key):
+        pass
+
+    # peter
+    def pivot(self):
+        pass
