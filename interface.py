@@ -1,4 +1,4 @@
-from fuzzy import FuzzySearch
+from search import FuzzySearch
 
 
 class Interface:
@@ -48,10 +48,22 @@ class Interface:
             # Lisa delete option. Requires value to be an exact match and type to a value in the csv file to work.
             elif option == 3:
 
-                list = ["name", "orbit_type", "orbit_height", "cycle", "date", "oos_date", "org"]
-                attribute = int(input("Which attribute are you searching for? \n[0] Name \n[1]\
- Orbit Type \n[2] Orbit Height \n[3] Cycle, \n[4] Date, \n[5] Out of Service Date, \n[6] Organization: \n"))
-                if attribute <= len(list)-1:
+                list = [
+                    "name",
+                    "orbit_type",
+                    "orbit_height",
+                    "cycle",
+                    "date",
+                    "oos_date",
+                    "org",
+                ]
+                attribute = int(
+                    input(
+                        "Which attribute are you searching for? \n[0] Name \n[1]\
+ Orbit Type \n[2] Orbit Height \n[3] Cycle, \n[4] Date, \n[5] Out of Service Date, \n[6] Organization: \n"
+                    )
+                )
+                if attribute <= len(list) - 1:
                     attribute = list[attribute]
                     print(attribute)
                 value = input(f"Enter your {attribute} search: ")
@@ -93,11 +105,17 @@ class Interface:
                         # display the attribute options
                         for i, atr in enumerate(attributes):
                             print(f"[{i}] {atr}")
-                        attribute_index = int(input("Choose an attribute num: "))
+                        attribute_index = int(
+                            input("Choose an attribute num: ")
+                        )
                         selected_atr = attributes[attribute_index]
-                        search_value = input(f"enter your search for {selected_atr}: ")
+                        search_value = input(
+                            f"enter your search for {selected_atr}: "
+                        )
                         fuzzy = FuzzySearch(inventory.get_satellites())
-                        result = fuzzy.search_by_attribute(search_value, selected_atr)
+                        result = fuzzy.search_by_attribute(
+                            search_value, selected_atr
+                        )
                         for sat, ratio in result:
                             print(sat)
 
