@@ -1,5 +1,5 @@
 import csv
-from inventoryabs import Inventory
+from .inventoryabs import Inventory
 from dictionaries import BstDict
 from satellite import Satellite
 
