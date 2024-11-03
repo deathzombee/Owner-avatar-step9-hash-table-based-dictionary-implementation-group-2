@@ -1,4 +1,6 @@
-from dictabs import DictAbstract
+from .dictabs import DictAbstract
+
+
 # Declare a private node class
 class _LLNode:
     def __init__(self, key, value):
@@ -10,6 +12,7 @@ class _LLNode:
     # Define print format so we can call print(Node)
     def __str__(self):
         return f"{self.key}: {self.value}"
+
 
 # Implement a dictionary using a doubly linked list.
 class DllDict(DictAbstract):
@@ -29,19 +32,20 @@ class DllDict(DictAbstract):
         key == self._normalize_key(key)
         return self._find(key) is not None
 
-    #Implementing the python magic method __getitem__
-    #This function will help in using this sytax dict[key]
-    #technically multiple parts: get& set: next & prev
-    #peter vang
-    #this return head from the find method. Method similar to last step but not needing the root because we are using linked list
+    # Implementing the python magic method __getitem__
+    # This function will help in using this sytax dict[key]
+    # technically multiple parts: get& set: next & prev
+    # peter vang
+    # this return head from the find method. Method similar to last step but not needing the root because we are using linked list
     def __getitem__(self, key):
-        #Given a key, return the next coresponding value. Raises a KeyError
-        #if next or key is not in the map.
+        # Given a key, return the next coresponding value. Raises a KeyError
+        # if next or key is not in the map.
         key = self._normalize_key(key)
         node = self._find(key)
         if node is None:
             raise KeyError("Item does not exist")
-        return node.value 
+        return node.value
+
     # Gabriel
     def __iter__(self):
         """Return an iterator of all keys in the DllDict."""
@@ -50,8 +54,8 @@ class DllDict(DictAbstract):
             yield current.key
             current = current.next
 
-    #Internal function that looks for the node with
-    #the given specified value
+    # Internal function that looks for the node with
+    # the given specified value
     def _find(self, key):
         current = self.head
         while current:
@@ -60,49 +64,47 @@ class DllDict(DictAbstract):
             current = current.next
         return None
 
-
-    #Lisa
+    # Lisa
     def __setitem__(self, key, value):
         key = self._normalize_key(key)
         current = self.head
 
         while current:
-        #check if key matches existing key on the head node. If yes, update value.
+            # check if key matches existing key on the head node. If yes, update value.
             if current.key == key:
-               current.value = value
-               return
+                current.value = value
+                return
             current = current.next
-        #If head is empty, set the head & tail to the new_node.
+        # If head is empty, set the head & tail to the new_node.
         new_node = _LLNode(key, value)
-        
+
         if self.head is None:
             self.head = new_node
             self.tail = new_node
-        #If the head isn't a match to key and isn't empty
-        #assign new node to be after the tail, 
-        #new nodes prev to be the tail, 
-        #then replace tail with new node. Increment length.
-        
+        # If the head isn't a match to key and isn't empty
+        # assign new node to be after the tail,
+        # new nodes prev to be the tail,
+        # then replace tail with new node. Increment length.
+
         else:
             self.tail.next = new_node
             new_node.prev = self.tail
             self.tail = new_node
         self._size += 1
 
+    # Remove a node from the tree with the indicated key
+    # Return the value after removing the node
+    # Raise a KeyError if the key is not in the map."
 
-    #Remove a node from the tree with the indicated key
-    #Return the value after removing the node
-    #Raise a KeyError if the key is not in the map."
-
-    #Lisa
+    # Lisa
     def pop(self, key):
         key = self._normalize_key(key)
-        
-        #if key does not exist __getitem will return error, 
+
+        # if key does not exist __getitem will return error,
         # otherwise it returns value associated with key
         value = self.__getitem__(key)
-        
-        #if key exists, use remove method to get rid of 
+
+        # if key exists, use remove method to get rid of
         # that node and decrement length
         self._remove(key)
         self._size -= 1
@@ -137,9 +139,8 @@ class DllDict(DictAbstract):
         """Return a normalized version of the key."""
         return key.strip().lower()
 
-   
-    #Peter Vang
-    #returns all data until it goes to next pointer of tail being none and exiting while loop
+    # Peter Vang
+    # returns all data until it goes to next pointer of tail being none and exiting while loop
     def values(self):
         """Return an iterable of all values in the BSTDict."""
         current = self.head
