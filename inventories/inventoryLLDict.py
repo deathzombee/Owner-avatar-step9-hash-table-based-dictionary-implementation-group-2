@@ -1,7 +1,7 @@
 import csv
 from .inventoryabs import Inventory
 from dictionaries import DllDict
-from satellite import Satellite
+from objects import Satellite
 
 
 class SatSystemDll(Inventory):

@@ -1,7 +1,7 @@
 import csv
 from inventoryabs import Inventory
 from slDict import SLDict
-from satellite import Satellite
+from objects import Satellite
 
 
 class SatSystemSLDict:
