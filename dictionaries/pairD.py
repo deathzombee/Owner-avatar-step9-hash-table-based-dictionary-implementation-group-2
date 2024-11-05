@@ -1,6 +1,6 @@
 # not a class, a "struct" or "data class"
 from dataclasses import dataclass
-from satellite import Satellite
+from objects import Satellite
 
 
 @dataclass
