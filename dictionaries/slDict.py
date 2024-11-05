@@ -83,8 +83,15 @@ class SLDict(DictAbstract):
         pass
 
     # lisa
+    # using this resource https://www.geeksforgeeks.org
+    # /python-program-for-quicksort/
     def rl(self, key):
-        pass
+        if self.__len__ <= 1:
+            return self._data
+        else:
+            values = [sat for sat in self._dat[1:] if sat < pivot]
+
+            return rl(values)
 
     # Gabriel
     def rr(self, key):
