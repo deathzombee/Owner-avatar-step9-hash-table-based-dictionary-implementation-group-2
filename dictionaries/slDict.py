@@ -30,7 +30,7 @@ class SLDict(DictAbstract):
         if idx is None:
             raise KeyError("Item does not exist")
         # return the satellite of index of our found key
-        return self._data.value[idx]
+        return self._data[idx].value
 
     # Lisa
     def _find(self, key):
