@@ -7,6 +7,7 @@ class SLDict(DictAbstract):
     def __init__(self):
         # Initialize an empty list to store PairD objects
         self._data = []
+        self._size = 0
 
     # Define print format so we can call print(Node)
     def __str__(self):
@@ -27,6 +28,7 @@ class SLDict(DictAbstract):
     # Lisa
     def _find(self, key):
         norm_key = self._normalize_key(key)
+        # pair is pairD aka a data class, recall enumerate returns index of each tuple
         for index, pair in enumerate(self._data):
             if pair.key == norm_key:
                 return index
@@ -35,28 +37,31 @@ class SLDict(DictAbstract):
     # Lisa
     def __setitem__(self, key, value):
         key = self._normalize_key(key)
-        current = PairD
-
+        # if no match, find will return None
+        index = self._find(key)
         # check if key matches existing key. If yes, update value.
-        """if current.key == key:
-                current.value = value
-                return
-            else:
-                self._data.append(PairD(key,value))
-"""
+        if index is not None:
+            self._data[index].value = value
+            return
+        else:
+            self._data.append(PairD(key, value))
+            self._size += 1
+            print(self._data)  # test if works
 
     # Lisa
     def pop(self, key):
         key = self._normalize_key(key)
 
-        # if key does not exist __getitem will return error,
-        # otherwise it returns value associated with key
-        value = self.__getitem__(key)
+        # if key does not exist _find will return none,
+        # otherwise it returns index associated with key
+        index = self._find(key)
 
-        # if key exists, use remove method to get rid of
-        # that node and decrement length
-        self._remove(key)
-        self._size -= 1
+        # if key exists, get rid of
+        # that pairD and decrement length
+        if index is not None:
+            value = self._data[index].value
+            del self._data[index]
+            self._size -= 1
         return value
 
     # Gabriel
