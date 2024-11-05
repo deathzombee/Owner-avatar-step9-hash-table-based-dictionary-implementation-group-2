@@ -7,7 +7,7 @@ from objects import Satellite
 class SatSystemSLDict:
 
     def __init__(self):
-        self.satdict = BstDict()
+        self.satdict = SLDict()
 
     def __str__(self):
         return "not implemented yet"
