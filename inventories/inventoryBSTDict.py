@@ -1,14 +1,15 @@
 import csv
-from inventoryabs import Inventory
-from dllDict import DllDict
-from satellite import Satellite
+from .inventoryabs import Inventory
+from dictionaries import BstDict
+from objects import Satellite
 
-class SatSystemDll(Inventory):
+
+class SatSystemBst(Inventory):
     def __init__(self):
-        self.satdict = DllDict()  
+        self.satdict = BstDict()
 
     def __str__(self):
-        return ("not implemented yet")
+        return "not implemented yet"
 
     def load_data(self):
         """Load item data from a file and populate the item list."""
@@ -20,17 +21,19 @@ class SatSystemDll(Inventory):
             for row in csv_reader:
                 sat = Satellite()
                 sat.name = row[0]
-                sat.orbit_type=row[1]
-                sat.orbit_height=row[2]
-                sat.cycle=row[3]
-                sat.date=row[4]
-                sat.oos_date=row[5]
-                sat.org=row[6]
+                sat.orbit_type = row[1]
+                sat.orbit_height = row[2]
+                sat.cycle = row[3]
+                sat.date = row[4]
+                sat.oos_date = row[5]
+                sat.org = row[6]
                 self.satdict[sat.name] = sat
+
     # Gabriel Calderon
     def get_satellites(self):
         """Return the list of satellites."""
-        return list(self.satdict.values())   
+        return list(self.satdict.values())
+
     # Gabriel Calderon
     def search(
         self, attribute, value
@@ -52,7 +55,7 @@ class SatSystemDll(Inventory):
         matches = []
         for satellite in self.satdict.values():
             attr_value = getattr(satellite, attribute)
-            if str(attr_value).lower() ==str(value).lower():
+            if str(attr_value).lower() == str(value).lower():
                 matches.append(satellite)
         return matches
 
@@ -111,7 +114,7 @@ class SatSystemDll(Inventory):
             csv_size = len(
                 self.satdict
             )  # set length of entire satellite list to variable
-            #self.satdict[satellite.name] = [sat for sat in self.satdict.name] if sat not in matches]
+            # self.satdict[satellite.name] = [sat for sat in self.satdict.name] if sat not in matches]
             for satellite in matches:
                 key = satellite.name
                 self.satdict.pop(key)
@@ -121,7 +124,9 @@ class SatSystemDll(Inventory):
             )  # print("The following indices were deleted from csv_list: " + indices_deleting) #use to check what indices were deleted
 
         elif prompt1 in ("no", "n"):  # execute if user input is negative
-            prompt2 = input("Do you want to delete a specific Satellite entry?")
+            prompt2 = input(
+                "Do you want to delete a specific Satellite entry?"
+            )
             if prompt2 == ("yes") or prompt1 == ("y"):
                 # Let the user select which satellite to delete
                 while True:
@@ -157,7 +162,9 @@ class SatSystemDll(Inventory):
         with open(
             "AllSatellites.csv", "w", newline=""
         ) as file:  # opens Satellite csv in write mode and refers to it as 'file', will close file automatically once done
-            writer = csv.writer(file)  # create writer object to write to the file
+            writer = csv.writer(
+                file
+            )  # create writer object to write to the file
             writer.writerow(
                 [
                     "name",
@@ -229,19 +236,21 @@ class SatSystemDll(Inventory):
                 print("error")
         else:
             # if everything was valid we can add to the list
-            self.satdict[new_satellite.name] = new_satellite #*figure out how insert works
+            self.satdict[new_satellite.name] = (
+                new_satellite  # *figure out how insert works
+            )
             print("Satellite successfully added!")
 
-    #Peter V. search function rework. Help from Gabriel
+    # Peter V. search function rework. Help from Gabriel
     def search_function(self, search):  # Peter V. search function
 
         display_result = []  # empty list to display reseult
         x = 0  # x value for incrementing
         for satellite in self.satdict.values():
-            #exits when size is 20 for the 20 results
+            # exits when size is 20 for the 20 results
             if x >= 20:
                 break
-             # if name matches add to display_results and wont add if duplicate
+            # if name matches add to display_results and wont add if duplicate
             if search.lower() == satellite.name.lower():
                 display_result.append(satellite)
                 x += 1
@@ -249,23 +258,23 @@ class SatSystemDll(Inventory):
             elif search.lower() == satellite.orbit_type.lower():
                 display_result.append(satellite)
                 x += 1
-            #if condition to search for orbit height
+            # if condition to search for orbit height
             elif self._attribute_matches(search, satellite.orbit_height):
                 display_result.append(satellite)
                 x += 1
-            #if condition to search cycle
+            # if condition to search cycle
             elif self._attribute_matches(search, satellite.cycle):
                 display_result.append(satellite)
                 x += 1
-            #if condition to search launched date
+            # if condition to search launched date
             elif self._attribute_matches(search, satellite.date):
                 display_result.append(satellite)
                 x += 1
-            #if condition to search out of service date
+            # if condition to search out of service date
             elif self._attribute_matches(search, satellite.oos_date):
                 display_result.append(satellite)
                 x += 1
-            #if condition to search organization 
+            # if condition to search organization
             elif search.lower() == satellite.org.lower():
                 display_result.append(satellite)
                 x += 1
@@ -286,16 +295,3 @@ class SatSystemDll(Inventory):
                 return False
         else:
             return search.lower() == str(attribute_value).lower()
-
-
-# Gabriel Calderon
-# just a method to make
-# a new reversed dictionary
-# because we used a doubly linked list
-def reversed_dict(self):
-    """Return a new DllDict with the elements in reversed order."""
-    new_dict = DllDict()
-    # Use reverse_iter to traverse the original dictionary in reverse
-    for node in self.reverse_iter():
-        new_dict[node.key] = node  # Insert into the new dictionary
-    return new_dict

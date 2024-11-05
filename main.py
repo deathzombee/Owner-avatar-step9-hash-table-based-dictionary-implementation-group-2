@@ -1,6 +1,5 @@
-from inventoryLLDict import SatSystemDll
+from inventories import SatSystemDll
 from interface import Interface
-
 
 
 # Gabriel Calderon

@@ -1,13 +1,12 @@
 import csv
-from inventoryabs import Inventory
-from slDict import SLDict
-from satellite import Satellite
+from .inventoryabs import Inventory
+from dictionaries import DllDict
+from objects import Satellite
 
 
-class SatSystemSLDict:
-
+class SatSystemDll(Inventory):
     def __init__(self):
-        self.satdict = BstDict()
+        self.satdict = DllDict()
 
     def __str__(self):
         return "not implemented yet"
@@ -296,3 +295,16 @@ class SatSystemSLDict:
                 return False
         else:
             return search.lower() == str(attribute_value).lower()
+
+
+# Gabriel Calderon
+# just a method to make
+# a new reversed dictionary
+# because we used a doubly linked list
+def reversed_dict(self):
+    """Return a new DllDict with the elements in reversed order."""
+    new_dict = DllDict()
+    # Use reverse_iter to traverse the original dictionary in reverse
+    for node in self.reverse_iter():
+        new_dict[node.key] = node  # Insert into the new dictionary
+    return new_dict

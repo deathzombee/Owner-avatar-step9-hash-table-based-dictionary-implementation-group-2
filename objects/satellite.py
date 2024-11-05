@@ -2,7 +2,16 @@ class Satellite:
     """Class to represent a satellite object in the records."""
 
     # (Lisa M.)
-    def __init__(self, name=None, orbit_type=None, orbit_height=None, cycle=None, date=None, oos_date=None, org=None):
+    def __init__(
+        self,
+        name=None,
+        orbit_type=None,
+        orbit_height=None,
+        cycle=None,
+        date=None,
+        oos_date=None,
+        org=None,
+    ):
         self.name = name  # satellite name (Peter V)
         self.orbit_type = orbit_type  # satellite orbit type (Peter V)
         self.orbit_height = orbit_height  # satellite orbit height (Peter V)
@@ -14,21 +23,23 @@ class Satellite:
     @staticmethod  # (Gabriel C.)
     def _validate_non_empty_string(value, field_name):
         if value is None:
-            return ''
+            return ""
         return value
 
     @staticmethod  # (Gabriel C.)
     def _parse_optional_int(value, field_name):
-        if value is None or value == '':
+        if value is None or value == "":
             return None
         try:
             return int(value)
         except ValueError:
-            raise ValueError(f"{field_name} must be an integer or empty string.")
+            raise ValueError(
+                f"{field_name} must be an integer or empty string."
+            )
 
     @staticmethod  # (Gabriel C.)
     def _parse_optional_float(value, field_name):
-        if value is None or value == '':
+        if value is None or value == "":
             return None
         try:
             return float(value)
@@ -69,7 +80,9 @@ class Satellite:
 
     @orbit_type.setter
     def orbit_type(self, orbit_type):
-        self._orbit_type = self._validate_non_empty_string(orbit_type, "Orbit Type")
+        self._orbit_type = self._validate_non_empty_string(
+            orbit_type, "Orbit Type"
+        )
 
     # getter and setter for Satellite orbit height (Peter V)
     @property
@@ -78,7 +91,9 @@ class Satellite:
 
     @orbit_height.setter
     def orbit_height(self, orbit_height):
-        self._orbit_height = self._parse_optional_int(orbit_height, "Orbit Height")
+        self._orbit_height = self._parse_optional_int(
+            orbit_height, "Orbit Height"
+        )
 
     @property  # (Gabriel C.)
     def cycle(self):

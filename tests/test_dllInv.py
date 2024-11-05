@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from inventoryLLDict import SatSystemDll
-from satellite import Satellite
-from dllDict import DllDict
+from inventories import SatSystemDll
+from objects import Satellite
+from dictionaries import DllDict
 import io
 
 

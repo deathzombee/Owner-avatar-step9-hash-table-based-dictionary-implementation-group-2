@@ -1,5 +1,5 @@
 import unittest
-from dllDict import DllDict
+from dictionaries import DllDict
 
 
 class TestDllDict(unittest.TestCase):
