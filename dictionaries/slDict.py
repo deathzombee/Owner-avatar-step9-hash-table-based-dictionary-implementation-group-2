@@ -8,22 +8,24 @@ class SLDict(DictAbstract):
         # Initialize an empty list to store PairD objects
         self._data = []
 
-    # Gabriel
-    def _normalize_key(self, key):
-        """Return a normalized version of the key."""
-        key = key.strip().lower()
-        return key  # Add this line
-
-    def sort():
-        pass
+    # Define print format so we can call print(Node)
+    def __str__(self):
+        return f"{self.key}: {self.value}"
 
     def __len__(self):
-        pass
+        # Return the number of items stored in the dictionary
+        return len(self._data)
 
     def __contains__(self, key):
-        pass
+        # Return true if key is in the dictionary, False otherwise
+        key == self._normalize_key(key)
+        return self._find(key) is not None
 
     def __getitem__(self, key):
+        pass
+
+    # Lisa
+    def _find(self, key):
         pass
 
     # Lisa
@@ -52,6 +54,24 @@ class SLDict(DictAbstract):
         self._remove(key)
         self._size -= 1
         return value
+
+    # Gabriel
+    def _remove(self, key):
+        pass
+
+    # Gabriel
+    def _normalize_key(self, key):
+        """Return a normalized version of the key."""
+        key = key.strip().lower()
+        return key  # Add this line
+
+    # Peter
+    def values(self):
+        pass
+
+    # Team
+    def sort():
+        pass
 
     # lisa
     def rl(self, key):
