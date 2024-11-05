@@ -26,7 +26,11 @@ class SLDict(DictAbstract):
 
     # Lisa
     def _find(self, key):
-        pass
+        norm_key = self._normalize_key(key)
+        for index, pair in enumerate(self._data):
+            if pair.key == norm_key:
+                return index
+        return None
 
     # Lisa
     def __setitem__(self, key, value):
