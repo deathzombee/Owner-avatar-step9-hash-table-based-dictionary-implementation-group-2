@@ -21,8 +21,16 @@ class SLDict(DictAbstract):
         key == self._normalize_key(key)
         return self._find(key) is not None
 
+    # peter vang
+    # need to test
     def __getitem__(self, key):
-        pass
+        key = self._normalize_key(key)
+        # find will return index thus set to idx
+        idx = self._find(key)
+        if idx is None:
+            raise KeyError("Item does not exist")
+        # return the satellite of index of our found key
+        return self._data.value[idx]
 
     # Lisa
     def _find(self, key):
