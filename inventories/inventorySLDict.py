@@ -1,10 +1,10 @@
 import csv
-from inventoryabs import Inventory
-from slDict import SLDict
+from .inventoryabs import Inventory
+from dictionaries import SLDict
 from objects import Satellite
 
 
-class SatSystemSLDict:
+class SatSystemSLDict(Inventory):
 
     def __init__(self):
         self.satdict = SLDict()
@@ -29,6 +29,8 @@ class SatSystemSLDict:
                 sat.oos_date = row[5]
                 sat.org = row[6]
                 self.satdict[sat.name] = sat
+        self.satdict.mix()
+        self.satdict.sort()
 
     # Gabriel Calderon
     def get_satellites(self):

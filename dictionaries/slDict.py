@@ -1,5 +1,6 @@
 from .dictabs import DictAbstract
 from .pairD import PairD
+from random import shuffle
 
 
 class SLDict(DictAbstract):
@@ -11,7 +12,7 @@ class SLDict(DictAbstract):
 
     # Define print format so we can call print(Node)
     def __str__(self):
-        return f"{self.key}: {self.value}"
+        return "{" + ", ".join([str(pair) for pair in self._data]) + "}"
 
     def __len__(self):
         # Return the number of items stored in the dictionary
@@ -19,7 +20,7 @@ class SLDict(DictAbstract):
 
     def __contains__(self, key):
         # Return true if key is in the dictionary, False otherwise
-        key == self._normalize_key(key)
+        key = self._normalize_key(key)
         return self._find(key) is not None
 
     # peter vang
@@ -54,7 +55,7 @@ class SLDict(DictAbstract):
         else:
             self._data.append(PairD(key, value))
             self._size += 1
-            print(self._data)  # test if works
+            # print(self._data)  # test if works
 
     # Lisa
     def pop(self, key):
@@ -70,11 +71,18 @@ class SLDict(DictAbstract):
             value = self._data[index].value
             del self._data[index]
             self._size -= 1
-        return value
+            return value
+        raise KeyError("Key not found")
 
     # Gabriel
     def _remove(self, key):
-        pass
+        key = self._normalize_key(key)
+        index = self._find(key)
+        if index is not None:
+            del self._data[index]
+            self._size -= 1
+        else:
+            raise KeyError(f"Key {key} not found")
 
     # Gabriel
     def _normalize_key(self, key):
@@ -86,26 +94,46 @@ class SLDict(DictAbstract):
     def values(self):
         """Return an iterable of all values in the BSTDict."""
         return (pair.value for pair in self._data)
+    
+    def mix(self):
+        # Shuffle the data
+        shuffle(self._data)
 
     # Team
-    def sort():
-        pass
+
+    def sort(self):
+        """
+        Entry point for sorting _data using quicksort.
+
+        Explanation:
+        - Sets up the pivot and partitions _data into left and right.
+        - Recursively sorts each partition by calling rl.
+        - Combines the sorted left, pivot, and sorted right into _data.
+        """
+        if len(self._data) <= 1:
+            return self._data
+
+        # Use rl to sort _data directly
+        self._data = self.rl(self._data)
+        return self._data
 
     # lisa
     # using this resource https://www.geeksforgeeks.org
     # /python-program-for-quicksort/
-    def rl(self, key):
-        if self.__len__ <= 1:
-            return self._data
-        else:
-            values = [sat for sat in self._dat[1:] if sat < self.pivot]
+    def rl(self, data):
+        if len(data) <= 1:
+            return data
+        # Use the pivot function for consistency
+        pivot = self.pivot(data)
 
-            return values
+        # Split data based on pivot's value attribute
+        left = [sat for sat in data if sat.key < pivot.key]
+        right = [sat for sat in data if sat.key > pivot.key]
 
-    # Gabriel
-    def rr(self, key):
-        pass
+        # Recursively sort left and right, with pivot in the center
+        return self.rl(left) + [pivot] + self.rl(right)
 
+    # note should probably choose the middle value as the pivot
     # peter
     def pivot(self, data):
         # set the middle index of array to pivot

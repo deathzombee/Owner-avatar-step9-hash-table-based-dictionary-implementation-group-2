@@ -1,13 +1,24 @@
-from inventories import SatSystemDll
+import sys
+import unittest
+from inventories import SatSystemSLDict
 from interface import Interface
 
 
 # Gabriel Calderon
 def main():
-    inventory = SatSystemDll()
-    inventory.load_data()
-    menu = Interface()
-    menu.menu_function(inventory)
+    # Check if the user passed '--test' as a command-line argument
+    if "--test" in sys.argv:
+        # Run all tests in the test suite
+        loader = unittest.TestLoader()
+        tests = loader.discover(start_dir="tests", pattern="test_sl*.py")
+        test_runner = unittest.TextTestRunner(verbosity=2)
+        test_runner.run(tests)
+    else:
+        # Continue with the main program if no '--test' argument is passed
+        inventory = SatSystemSLDict()
+        inventory.load_data()
+        menu = Interface()
+        menu.menu_function(inventory)
 
 
 if __name__ == "__main__":
