@@ -89,9 +89,9 @@ class SLDict(DictAbstract):
         if self.__len__ <= 1:
             return self._data
         else:
-            values = [sat for sat in self._dat[1:] if sat < pivot]
+            values = [sat for sat in self._dat[1:] if sat < self.pivot]
 
-            return rl(values)
+            return values
 
     # Gabriel
     def rr(self, key):
