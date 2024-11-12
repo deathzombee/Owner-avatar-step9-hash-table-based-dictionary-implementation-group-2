@@ -85,10 +85,7 @@ class SLDict(DictAbstract):
     # Peter
     def values(self):
         """Return an iterable of all values in the BSTDict."""
-        current = PairD
-        while current:
-            yield current.value
-            current = current.next
+        return (pair.value for pair in self._data)
 
     # Team
     def sort():
@@ -110,7 +107,7 @@ class SLDict(DictAbstract):
         pass
 
     # peter
-    def pivot(self):
+    def pivot(self, data):
         # set the middle index of array to pivot
-        middle = len(self._data) // 2
-        return middle
+        middle = len(data) // 2
+        return data[middle]
