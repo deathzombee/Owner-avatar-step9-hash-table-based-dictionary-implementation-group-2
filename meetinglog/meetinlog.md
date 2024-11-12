@@ -15,3 +15,4 @@ Lisa Miao
 8. [10-25-24.pdf](https://drive.google.com/file/d/11zHksFpEgzjFD6c-oZ_Jhx8xU2LesSzv/view?usp=drive_link)
 9. [10-26-24.pdf](https://drive.google.com/file/d/14mPMHR18Ztldkg42Z78JxAXeexZZ0R4G/view?usp=drive_link)
 10. [11-01-24.pd](https://drive.google.com/file/d/1hzq-S9o1IkVl7iCPqQpdtGpI_3cy_aEe/view?usp=drive_link)
+11. [11-04-24.pd] (https://drive.google.com/file/d/1M66CkNKnDUeghr_m9cxXONaD_0yLl5Aa/view?usp=drive_link)
