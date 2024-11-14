@@ -1,0 +1,27 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/python:3",
+"features": {
+    "ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
+},
+"postCreateCommand": "pre-commit install",
+    "customizations": {
+    "vscode":{
+        "settings": {  
+        "python.formatting.provider": "ms-python.black-formatter",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true
+    },
+        "extensions":[
+            "charliermarsh.ruff",
+            "editorconfig.editorconfig",
+            "esbenp.prettier-vscode",
+            "dbaeumer.vscode-eslint",
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "ms-python.debugpy",
+            "ms-python.black-formatter"
+            ]
+            }
+            }
+            }
