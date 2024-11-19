@@ -34,7 +34,7 @@ class HTDict(DictAbstract):
         # return the satellite of index of our found key
         return self._data[idx].value
 
-    # Lisa
+    # Lisa CHANGE FOR HASH
     def _find(self, key):
         norm_key = self._normalize_key(key)
         # pair is pairD aka a data class, recall enumerate returns index of each tuple
@@ -43,7 +43,7 @@ class HTDict(DictAbstract):
                 return index
         return None
 
-    # Lisa
+    # Lisa CHANGE
     def __setitem__(self, key, value):
         key = self._normalize_key(key)
         # if no match, find will return None
@@ -95,12 +95,7 @@ class HTDict(DictAbstract):
         """Return an iterable of all values in the BSTDict."""
         return (pair.value for pair in self._data)
 
-    def mix(self):
-        # Shuffle the data
-        shuffle(self._data)
-
     # Team
-
     def sort(self):
         """
         Entry point for sorting _data using quicksort.
@@ -117,25 +112,16 @@ class HTDict(DictAbstract):
         self._data = self.rl(self._data)
         return self._data
 
-    # lisa
-    # using this resource https://www.geeksforgeeks.org
-    # /python-program-for-quicksort/
-    def rl(self, data):
-        if len(data) <= 1:
-            return data
-        # Use the pivot function for consistency
-        pivot = self.pivot(data)
+    # Gabriel
+    def cuckoo(self, key):
+        pass
 
-        # Split data based on pivot's value attribute
-        left = [sat for sat in data if sat.key < pivot.key]
-        right = [sat for sat in data if sat.key > pivot.key]
+    # Peter
+    def hash1(self, key):
+        key = key % 11
+        return key
 
-        # Recursively sort left and right, with pivot in the center
-        return self.rl(left) + [pivot] + self.rl(right)
-
-    # note should probably choose the middle value as the pivot
-    # peter
-    def pivot(self, data):
-        # set the middle index of array to pivot
-        middle = len(data) // 2
-        return data[middle]
+    # Lisa
+    def hash2(self, key):
+        key = (key / 11) % 11
+        return key
