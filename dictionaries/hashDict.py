@@ -1,6 +1,5 @@
 from .dictabs import DictAbstract
 from .pairD import PairD
-from random import shuffle
 
 
 class HTDict(DictAbstract):
@@ -118,7 +117,10 @@ class HTDict(DictAbstract):
 
     # Peter
     def hash1(self, key):
-        key = key % 11
+        key = self._normalize_key(key)
+        # hash string key. iterate through each character and adding
+        key = sum(ord(char) for char in key) % 11
+        # key = key % 11
         return key
 
     # Lisa
