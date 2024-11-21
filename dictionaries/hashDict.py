@@ -121,6 +121,7 @@ class HTDict(DictAbstract):
         # hash string key. iterate through each character and adding
         key = sum(ord(char) for char in key) % 11
         # key = key % 11
+        # need to store key into hash table 1. need to create hash table one in init
         return key
 
     # Lisa
