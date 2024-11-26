@@ -128,8 +128,19 @@ class HTDict(DictAbstract):
         # hash string key. iterate through each character and adding
         key = sum(ord(char) for char in key) % 11
         # key = key % 11
-        # need to store key into hash table 1. need to create hash table one in init
-        return key
+        # check if index of first table is empty.
+        if self._table1[key] is None or []:
+            self._table1.insert(key, key)
+        # if spot in first table is not empty swap spots and kick out the initial to next table
+        else:
+            # grab the inital
+            kicked = self._table1[key]
+            # remove initial from array
+            self._table1.pop(key)
+            # insert new into array
+            self._table1.insert(key, key)
+            # return the initial to be inserted to next table
+            return kicked
 
     # Lisa
     def hash2(self, key):
