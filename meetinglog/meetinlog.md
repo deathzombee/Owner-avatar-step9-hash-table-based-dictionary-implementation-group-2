@@ -20,3 +20,5 @@ Lisa Miao
 11. [11-04-24.pdf](<https://drive.google.com/file/d/1M66CkNKnDUeghr_m9cxXONaD_0yLl5Aa/view?usp=drive_link>)
   -[video](https://drive.google.com/file/d/1Qq_uEvAkapo-c5pGrzVuzyb_mMzLaWfU/view?usp=drive_link)
   -[transcript](https://drive.google.com/file/d/1lxlUmnnmmBsT0ju98HO4Gf5jGfL-vDO5/view?usp=drive_link)
+12. [11-18-24.pdf]https://drive.google.com/file/d/10bjfLJ-AQ_aVfIUjyZ2XoKE4M78xxudc/view?usp=drive_link
+13. [11-20-24.pdf]https://drive.google.com/file/d/1S61PTyTVqsgBB6uT3-w9n6lpiK9YqWIc/view?usp=drive_link
