@@ -33,8 +33,12 @@ class HTDict(DictAbstract):
         idx = self._find(key)
         if idx is None:
             raise KeyError("Item does not exist")
-        # return the satellite of index of our found key
-        return self._data[idx].value
+        # return the satellite of our found key match that of table 1
+        elif key is self._table1[idx].value:
+            return self._table1[idx].value
+        # return the satellite of our found key match that of table 2
+        elif key is self._table2[idx].value:
+            return self._table2[idx]
 
     # Lisa CHANGE FOR HASH
     def _find(self, key):
