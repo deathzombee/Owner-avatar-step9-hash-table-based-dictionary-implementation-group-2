@@ -99,7 +99,7 @@ class HTDict(DictAbstract):
     # Peter
     def values(self):
         """Return an iterable of all values in the BSTDict."""
-        return (pair.value for pair in self._data)
+        return self._table1 and self._table2
 
     # Team
     def sort(self):
