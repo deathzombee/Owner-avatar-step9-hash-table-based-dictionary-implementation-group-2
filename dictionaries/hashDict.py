@@ -4,13 +4,10 @@ from .pairD import PairD
 
 class HTDict(DictAbstract):
     # Team programming
-    def __init__(self, capacity=1000):
+    def __init__(self):
         # Initialize an empty list to store PairD objects
         self._data = []
         self._size = 0
-        self._capacity = capacity
-        self._table1 = [None] * self.capacity
-        self._table2 = [None] * self.capacity
 
     # Define print format so we can call print(Node)
     def __str__(self):
