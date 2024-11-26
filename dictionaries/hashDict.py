@@ -4,10 +4,14 @@ from .pairD import PairD
 
 class HTDict(DictAbstract):
     # Team programming
-    def __init__(self):
+    def __init__(self, capacity=1000):
         # Initialize an empty list to store PairD objects
+        # Inititialize two tables for cuckoo hashing
         self._data = []
         self._size = 0
+        self._capacity = capacity
+        self._table1 = [None] * self.capacity
+        self._table2 = [None] * self.capacity
 
     # Define print format so we can call print(Node)
     def __str__(self):
@@ -37,45 +41,65 @@ class HTDict(DictAbstract):
         elif key is self._table2[idx].value:
             return self._table2[idx]
 
-    # Lisa CHANGE FOR HASH
+    # Lisa
     def _find(self, key):
+        # Normalize key and get index from hash1 & hash2.
         norm_key = self._normalize_key(key)
-        # pair is pairD aka a data class, recall enumerate returns index of each tuple
-        for index, pair in enumerate(self._data):
-            if pair.key == norm_key:
-                return index
-        return None
+        index1 = self.hash1(norm_key)
+        index2 = self.hash2(norm_key)
+
+        # Checking for key in both hash tables.
+        if self._table1[index1] and self._table1[index1].key == norm_key:
+            return self._table1[index1].value
+        if self._table2[index2] and self._table2[index2].key == norm_key:
+            return self._table2[index2].value
+
+        raise KeyError(f"Key '{key}' not found")
 
     # Lisa CHANGE
     def __setitem__(self, key, value):
-        key = self._normalize_key(key)
-        # if no match, find will return None
-        index = self._find(key)
-        # check if key matches existing key. If yes, update value.
-        if index is not None:
-            self._data[index].value = value
-            return
-        else:
-            self._data.append(PairD(key, value))
+        norm_key = self._normalize_key(key)
+        pair = PairD(norm_key, value)
+
+        # Insert to table1
+        index1 = self.hash1(norm_key)
+        if self._table1(index1) is None:
+            self._table1[index1] = pair
             self._size += 1
-            # print(self._data)  # test if works
+            return
+        # Move existing pair to table2
+        pair, self._tabl1[index1] = self._table1[index1], pair
+
+        # Insert to table2
+        index2 = self.hash2(pair.key)
+        if self._table2[index2] is None:
+            self._table2[index2] = pair
+            self._size += 1
+            return
+        # Move existing pair
+        pair, self._tabl2[index2] = self._table2[index2], pair
 
     # Lisa
     def pop(self, key):
-        key = self._normalize_key(key)
+        norm_key = self._normalize_key(key)
+        index1 = self.hash1(norm_key)
+        index2 = self.hash2(norm_key)
 
-        # if key does not exist _find will return none,
-        # otherwise it returns index associated with key
-        index = self._find(key)
-
-        # if key exists, get rid of
-        # that pairD and decrement length
-        if index is not None:
-            value = self._data[index].value
-            del self._data[index]
+        # Remove from table 1
+        if self._table1[index1] and self._table1[index1].key == key:
+            value = self._table1[index1].value
+            self._table1[index1] = None
             self._size -= 1
             return value
-        raise KeyError("Key not found")
+
+        # Remove from table 2
+        if self._table2[index2] and self._table2[index2].key == key:
+            value = self._table2[index2].value
+            self._table2[index2] = None
+            self._size -= 1
+            return value
+
+        raise KeyError("Key '{key}'not found")
 
     # Gabriel
     def _remove(self, key):
@@ -91,7 +115,8 @@ class HTDict(DictAbstract):
     def _normalize_key(self, key):
         """Return a normalized version of the key."""
         key = key.strip().lower()
-        return key  # Add this line
+        ascii_sum = sum(ord(char) for char in key)
+        return ascii_sum
 
     # Peter
     def values(self):
@@ -141,5 +166,6 @@ class HTDict(DictAbstract):
 
     # Lisa
     def hash2(self, key):
-        key = (key / 11) % 11
-        return key
+        norm_key = self._normalize_key(key)
+        index = (norm_key // 11) % 11
+        return index

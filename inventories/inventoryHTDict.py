@@ -1,12 +1,12 @@
 import csv
 from .inventoryabs import Inventory
-from dictionaries import DllDict
+from dictionaries import HTDict
 from objects import Satellite
 
 
 class SatSystemHT(Inventory):
     def __init__(self):
-        self.satdict = DllDict()
+        self.satdict = HTDict()
 
     def __str__(self):
         return "not implemented yet"
@@ -62,17 +62,21 @@ class SatSystemHT(Inventory):
     # Lisa M.
     def birthday_search(self, date):
         list = []  # create a list to hold the chosen satellites
-        low = (
-            date // 10
-        ) * 10  # integer math to obtain low value of the decade based on user input
-        high = low + 10  # obtain high value of decade by adding 10 to low val
+        # get low value of the decade based on user input
+        low = (date // 10) * 10
+        # obtain high value of decade by adding 10 to low val
+        high = low + 10
 
-        for year in range(low, high):  # iterates through the decade
-            result = self.search(
-                "date", year
-            )  # stores the satellite that falls within the range in result
-            list.extend(result)  # appends each result to the array, list.
-        return list  # prints out the complete list of satellites that fall within the range
+        # iterate through all satellites
+        for satellite in self.satdict.values():
+            try:
+                launched = int(satellite.date)
+                if low <= launched < high:
+                    list.extend(satellite)
+            except ValueError:
+                # skip satellites with invalid year
+                continue
+        return list
 
     # Lisa M.
     def delete(self, attribute, value):
