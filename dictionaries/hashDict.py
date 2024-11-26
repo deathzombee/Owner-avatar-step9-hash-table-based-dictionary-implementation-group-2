@@ -1,6 +1,5 @@
 from .dictabs import DictAbstract
 from .pairD import PairD
-from random import shuffle
 
 
 class HTDict(DictAbstract):
@@ -31,8 +30,12 @@ class HTDict(DictAbstract):
         idx = self._find(key)
         if idx is None:
             raise KeyError("Item does not exist")
-        # return the satellite of index of our found key
-        return self._data[idx].value
+        # return the satellite of our found key match that of table 1
+        elif key is self._table1[idx].value:
+            return self._table1[idx].value
+        # return the satellite of our found key match that of table 2
+        elif key is self._table2[idx].value:
+            return self._table2[idx]
 
     # Lisa CHANGE FOR HASH
     def _find(self, key):
@@ -93,7 +96,7 @@ class HTDict(DictAbstract):
     # Peter
     def values(self):
         """Return an iterable of all values in the BSTDict."""
-        return (pair.value for pair in self._data)
+        return self._table1 and self._table2
 
     # Team
     def sort(self):
@@ -118,8 +121,23 @@ class HTDict(DictAbstract):
 
     # Peter
     def hash1(self, key):
-        key = key % 11
-        return key
+        key = self._normalize_key(key)
+        # hash string key. iterate through each character and adding
+        key = sum(ord(char) for char in key) % 11
+        # key = key % 11
+        # check if index of first table is empty.
+        if self._table1[key] is None or []:
+            self._table1.insert(key, key)
+        # if spot in first table is not empty swap spots and kick out the initial to next table
+        else:
+            # grab the inital
+            kicked = self._table1[key]
+            # remove initial from array
+            self._table1.pop(key)
+            # insert new into array
+            self._table1.insert(key, key)
+            # return the initial to be inserted to next table
+            return kicked
 
     # Lisa
     def hash2(self, key):
