@@ -1,6 +1,6 @@
 import sys
 import unittest
-from inventories import SatSystemSLDict
+from inventories import SatSystemHT
 from interface import Interface
 
 
@@ -15,7 +15,7 @@ def main():
         test_runner.run(tests)
     else:
         # Continue with the main program if no '--test' argument is passed
-        inventory = SatSystemSLDict()
+        inventory = SatSystemHT()
         inventory.load_data()
         menu = Interface()
         menu.menu_function(inventory)
