@@ -10,7 +10,7 @@ def main():
     if "--test" in sys.argv:
         # Run all tests in the test suite
         loader = unittest.TestLoader()
-        tests = loader.discover(start_dir="tests", pattern="test_sl*.py")
+        tests = loader.discover(start_dir="tests", pattern="test_cc*.py")
         test_runner = unittest.TextTestRunner(verbosity=2)
         test_runner.run(tests)
     else:
