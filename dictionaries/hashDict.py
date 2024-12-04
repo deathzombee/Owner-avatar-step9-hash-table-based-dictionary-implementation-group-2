@@ -1,171 +1,231 @@
 from .dictabs import DictAbstract
-from .pairD import PairD
+import random
 
 
 class HTDict(DictAbstract):
     # Team programming
+
     def __init__(self, capacity=1000):
-        # Initialize an empty list to store PairD objects
-        # Inititialize two tables for cuckoo hashing
-        self._data = []
+        """
+        Initialize two tables for cuckoo hashing with a total given capacity.
+        Each table gets half the capacity.
+        """
+        self._capacity = capacity  # Total capacity
         self._size = 0
-        self._capacity = capacity
-        self._table1 = [None] * self.capacity
-        self._table2 = [None] * self.capacity
+        self._table1 = [None] * (
+            self._capacity // 2
+        )  # Half capacity for table 1
+        self._table2 = [None] * (
+            self._capacity // 2
+        )  # Half capacity for table 2
+        self._rehash_seed = random.randint(
+            0, 100000
+        )  # Seed for hash randomization during rehash
 
     # Define print format so we can call print(Node)
+    # Team programming
     def __str__(self):
-        return "{" + ", ".join([str(pair) for pair in self._data]) + "}"
+        """
+        Define print format for the dictionary.
+        Combines non-empty key-value pairs from both tables.
+        """
+        items = [
+            f"{key}: {value}"
+            for table in (self._table1, self._table2)
+            for pair in table
+            if pair is not None
+            for key, value in [pair]
+        ]
+        return "{" + ", ".join(items) + "}"
 
+    # Return the number of items stored in the dictionary
+    # Team programming
     def __len__(self):
-        # Return the number of items stored in the dictionary
-        return len(self._data)
+        """
+        Return the number of items stored in the dictionary.
+        """
+        return self._size
 
+    # Return true if key is in the dictionary, False otherwise
+    # Lisa
     def __contains__(self, key):
-        # Return true if key is in the dictionary, False otherwise
-        key = self._normalize_key(key)
-        return self._find(key) is not None
+        """
+        Return True if the key exists in the dictionary, False otherwise.
+        """
+        norm_key = self._normalize_key(key)  # Normalize the key
+        try:
+            self._find(norm_key)
+            return True
+        except KeyError:
+            return False
 
-    # peter vang
-    # need to test
+    # Retrieve value associated with a key
+    # Peter
     def __getitem__(self, key):
-        key = self._normalize_key(key)
-        # find will return index thus set to idx
-        idx = self._find(key)
-        if idx is None:
-            raise KeyError("Item does not exist")
-        # return the satellite of our found key match that of table 1
-        elif key is self._table1[idx].value:
-            return self._table1[idx].value
-        # return the satellite of our found key match that of table 2
-        elif key is self._table2[idx].value:
-            return self._table2[idx]
+        """
+        Retrieve the value associated with the given key.
+        Raises KeyError if the key is not found.
+        """
+        norm_key = self._normalize_key(key)  # Normalize the key
+        return self._find(norm_key)
 
+    # Find value associated with a key
     # Lisa
     def _find(self, key):
-        # Normalize key and get index from hash1 & hash2.
-        norm_key = self._normalize_key(key)
-        index1 = self.hash1(norm_key)
-        index2 = self.hash2(norm_key)
+        """
+        Find the value associated with the given key.
+        Returns the value if found, raises KeyError otherwise.
+        """
+        index1, index2 = self.hash1(key), self.hash2(key)
 
-        # Checking for key in both hash tables.
-        if self._table1[index1] and self._table1[index1].key == norm_key:
-            return self._table1[index1].value
-        if self._table2[index2] and self._table2[index2].key == norm_key:
-            return self._table2[index2].value
+        if self._table1[index1] and self._table1[index1][0] == key:
+            return self._table1[index1][1]
+
+        if self._table2[index2] and self._table2[index2][0] == key:
+            return self._table2[index2][1]
 
         raise KeyError(f"Key '{key}' not found")
 
-    # Lisa CHANGE
+    # Add or update key-value pair
+    # Lisa
     def __setitem__(self, key, value):
-        norm_key = self._normalize_key(key)
-        pair = PairD(norm_key, value)
+        """
+        Add or update a key-value pair in the dictionary.
+        Handles collisions using cuckoo hashing with retries.
+        """
+        pair = (self._normalize_key(key), value)
+        max_retries = 10
 
-        # Insert to table1
-        index1 = self.hash1(norm_key)
-        if self._table1(index1) is None:
-            self._table1[index1] = pair
-            self._size += 1
-            return
-        # Move existing pair to table2
-        pair, self._tabl1[index1] = self._table1[index1], pair
+        for _ in range(max_retries):
+            index1, index2 = self.hash1(pair[0]), self.hash2(pair[0])
 
-        # Insert to table2
-        index2 = self.hash2(pair.key)
-        if self._table2[index2] is None:
-            self._table2[index2] = pair
-            self._size += 1
-            return
-        # Move existing pair
-        pair, self._tabl2[index2] = self._table2[index2], pair
+            # Insert into table 1
+            if not self._table1[index1] or self._table1[index1][0] == pair[0]:
+                if not self._table1[index1]:
+                    self._size += 1
+                self._table1[index1] = pair
+                return
 
+            # Insert into table 2
+            if not self._table2[index2] or self._table2[index2][0] == pair[0]:
+                if not self._table2[index2]:
+                    self._size += 1
+                self._table2[index2] = pair
+                return
+
+            # Eviction logic
+            pair, self._table1[index1] = self._table1[index1], pair
+
+        # Trigger rehash if retries fail
+        self._rehash()
+        self.__setitem__(pair[0], pair[1])
+
+    # Remove and return value associated with a key
     # Lisa
     def pop(self, key):
-        norm_key = self._normalize_key(key)
-        index1 = self.hash1(norm_key)
-        index2 = self.hash2(norm_key)
+        """
+        Remove and return the value associated with the given key.
+        Raises KeyError if the key is not found.
+        """
+        norm_key = self._normalize_key(key)  # Normalize the key
+        index1, index2 = self.hash1(norm_key), self.hash2(norm_key)
 
-        # Remove from table 1
-        if self._table1[index1] and self._table1[index1].key == key:
-            value = self._table1[index1].value
+        if self._table1[index1] and self._table1[index1][0] == norm_key:
+            value = self._table1[index1][1]
             self._table1[index1] = None
             self._size -= 1
             return value
 
-        # Remove from table 2
-        if self._table2[index2] and self._table2[index2].key == key:
-            value = self._table2[index2].value
+        if self._table2[index2] and self._table2[index2][0] == norm_key:
+            value = self._table2[index2][1]
             self._table2[index2] = None
             self._size -= 1
             return value
 
-        raise KeyError("Key '{key}'not found")
+        raise KeyError(f"Key '{key}' not found")
 
+    # Resize and rehash the tables
     # Gabriel
-    def _remove(self, key):
-        key = self._normalize_key(key)
-        index = self._find(key)
-        if index is not None:
-            del self._data[index]
-            self._size -= 1
-        else:
-            raise KeyError(f"Key {key} not found")
+    def _rehash(self):
+        """
+        Resize and rehash the tables to avoid infinite loops due to collisions.
+        """
+        old_table1, old_table2 = self._table1, self._table2
+        failed_keys = set()
 
+        self._capacity *= 2
+        self._table1 = [None] * (self._capacity // 2)
+        self._table2 = [None] * (self._capacity // 2)
+        self._size = 0
+
+        # Rehash all existing keys
+        for table in (old_table1, old_table2):
+            for pair in table:
+                if pair:
+                    try:
+                        self.__setitem__(pair[0], pair[1])
+                    except RuntimeError:
+                        print(
+                            f"[WARNING] Persistent collision for key '{pair[0]}' during rehash."
+                        )
+                        failed_keys.add(pair)
+
+    # Normalize a key
     # Gabriel
     def _normalize_key(self, key):
-        """Return a normalized version of the key."""
-        key = key.strip().lower()
-        ascii_sum = sum(ord(char) for char in key)
-        return ascii_sum
+        """
+        Normalize the key by stripping whitespace and converting to lowercase.
+        """
+        return key.strip().lower()
 
+    # Return an iterable of all key-value pairs
+    # Peter
+    def items(self):
+        """
+        Return an iterable of all key-value pairs in the dictionary.
+        """
+        return (
+            pair
+            for table in (self._table1, self._table2)
+            for pair in table
+            if pair
+        )
+
+    # Return all values in the dictionary
     # Peter
     def values(self):
-        """Return an iterable of all values in the BSTDict."""
-        return self._table1 and self._table2
-
-    # Team
-    def sort(self):
         """
-        Entry point for sorting _data using quicksort.
-
-        Explanation:
-        - Sets up the pivot and partitions _data into left and right.
-        - Recursively sorts each partition by calling rl.
-        - Combines the sorted left, pivot, and sorted right into _data.
+        Directly iterate over the hash tables and yield all stored values.
+        Skip None entries.
         """
-        if len(self._data) <= 1:
-            return self._data
+        for pair in self.items():
+            yield pair[1]
 
-        # Use rl to sort _data directly
-        self._data = self.rl(self._data)
-        return self._data
-
+    # First hash function
     # Gabriel
-    def cuckoo(self, key):
-        pass
-
-    # Peter
     def hash1(self, key):
-        key = self._normalize_key(key)
-        # hash string key. iterate through each character and adding
-        key = sum(ord(char) for char in key) % 11
-        # key = key % 11
-        # check if index of first table is empty.
-        if self._table1[key] is None or []:
-            self._table1.insert(key, key)
-        # if spot in first table is not empty swap spots and kick out the initial to next table
-        else:
-            # grab the inital
-            kicked = self._table1[key]
-            # remove initial from array
-            self._table1.pop(key)
-            # insert new into array
-            self._table1.insert(key, key)
-            # return the initial to be inserted to next table
-            return kicked
+        """
+        First hash function: FNV-1a inspired hash.
+        """
+        norm_key = self._normalize_key(key)  # Normalize the key
+        prime = 1099511628211
+        basis = 14695981039346656037
+        h = basis
+        for c in norm_key:
+            h ^= ord(c)
+            h *= prime
+        return h % len(self._table1)
 
-    # Lisa
+    # Second hash function
+    # Gabriel
     def hash2(self, key):
-        norm_key = self._normalize_key(key)
-        index = (norm_key // 11) % 11
-        return index
+        """
+        Second hash function: MurmurHash-style mixing.
+        """
+        norm_key = self._normalize_key(key)  # Normalize the key
+        h = 0
+        for i, c in enumerate(norm_key):
+            h ^= (ord(c) + i) * 0x5BD1E995
+            h &= 0xFFFFFFFF  # Ensure 32-bit value
+            h ^= h >> 24
+        return h % len(self._table2)

@@ -60,23 +60,25 @@ class SatSystemHT(Inventory):
         return matches
 
     # Lisa M.
+
     def birthday_search(self, date):
-        list = []  # create a list to hold the chosen satellites
-        # get low value of the decade based on user input
+        result = []  # Create a list to hold the chosen satellites
+
+        # Get the low and high values of the decade
         low = (date // 10) * 10
-        # obtain high value of decade by adding 10 to low val
         high = low + 10
 
-        # iterate through all satellites
+        # Iterate through all satellites
         for satellite in self.satdict.values():
             try:
-                launched = int(satellite.date)
-                if low <= launched < high:
-                    list.extend(satellite)
+                if satellite.date:  # Ensure date is not None or empty
+                    launched = int(satellite.date)
+                    if low <= launched < high:
+                        result.append(satellite)  # Append the Satellite object
             except ValueError:
-                # skip satellites with invalid year
+                # Skip satellites with invalid year
                 continue
-        return list
+        return result
 
     # Lisa M.
     def delete(self, attribute, value):

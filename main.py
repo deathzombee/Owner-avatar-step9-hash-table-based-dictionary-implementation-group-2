@@ -1,6 +1,6 @@
 import sys
 import unittest
-from inventories import SatSystemSLDict
+from inventories import SatSystemHT
 from interface import Interface
 
 
@@ -10,12 +10,12 @@ def main():
     if "--test" in sys.argv:
         # Run all tests in the test suite
         loader = unittest.TestLoader()
-        tests = loader.discover(start_dir="tests", pattern="test_sl*.py")
+        tests = loader.discover(start_dir="tests", pattern="test_cc*.py")
         test_runner = unittest.TextTestRunner(verbosity=2)
         test_runner.run(tests)
     else:
         # Continue with the main program if no '--test' argument is passed
-        inventory = SatSystemSLDict()
+        inventory = SatSystemHT()
         inventory.load_data()
         menu = Interface()
         menu.menu_function(inventory)
