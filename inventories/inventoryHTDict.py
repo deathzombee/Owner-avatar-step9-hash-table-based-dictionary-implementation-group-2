@@ -79,6 +79,7 @@ class SatSystemHT(Inventory):
                 # Skip satellites with invalid year
                 continue
         return result
+
     # Lisa M.
     def delete(self, attribute, value):
         """Delete satellites based on a specified attribute and value."""

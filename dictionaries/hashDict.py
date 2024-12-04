@@ -12,9 +12,15 @@ class HTDict(DictAbstract):
         """
         self._capacity = capacity  # Total capacity
         self._size = 0
-        self._table1 = [None] * (self._capacity // 2)  # Half capacity for table 1
-        self._table2 = [None] * (self._capacity // 2)  # Half capacity for table 2
-        self._rehash_seed = random.randint(0, 100000)  # Seed for hash randomization during rehash
+        self._table1 = [None] * (
+            self._capacity // 2
+        )  # Half capacity for table 1
+        self._table2 = [None] * (
+            self._capacity // 2
+        )  # Half capacity for table 2
+        self._rehash_seed = random.randint(
+            0, 100000
+        )  # Seed for hash randomization during rehash
 
     # Define print format so we can call print(Node)
     # Team programming
@@ -26,7 +32,8 @@ class HTDict(DictAbstract):
         items = [
             f"{key}: {value}"
             for table in (self._table1, self._table2)
-            for pair in table if pair is not None
+            for pair in table
+            if pair is not None
             for key, value in [pair]
         ]
         return "{" + ", ".join(items) + "}"
@@ -158,7 +165,9 @@ class HTDict(DictAbstract):
                     try:
                         self.__setitem__(pair[0], pair[1])
                     except RuntimeError:
-                        print(f"[WARNING] Persistent collision for key '{pair[0]}' during rehash.")
+                        print(
+                            f"[WARNING] Persistent collision for key '{pair[0]}' during rehash."
+                        )
                         failed_keys.add(pair)
 
     # Normalize a key
@@ -175,7 +184,12 @@ class HTDict(DictAbstract):
         """
         Return an iterable of all key-value pairs in the dictionary.
         """
-        return (pair for table in (self._table1, self._table2) for pair in table if pair)
+        return (
+            pair
+            for table in (self._table1, self._table2)
+            for pair in table
+            if pair
+        )
 
     # Return all values in the dictionary
     # Peter
@@ -211,7 +225,7 @@ class HTDict(DictAbstract):
         norm_key = self._normalize_key(key)  # Normalize the key
         h = 0
         for i, c in enumerate(norm_key):
-            h ^= (ord(c) + i) * 0x5bd1e995
+            h ^= (ord(c) + i) * 0x5BD1E995
             h &= 0xFFFFFFFF  # Ensure 32-bit value
             h ^= h >> 24
         return h % len(self._table2)
